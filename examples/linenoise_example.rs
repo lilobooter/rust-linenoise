@@ -1,8 +1,8 @@
 extern crate linenoise;
 
 use std::collections::BTreeMap;
-use std::os::raw::c_void;
-use std::ptr;
+use std::sync::Arc;
+use std::sync::Mutex;
 
 struct Dictionary
 {
@@ -11,47 +11,23 @@ struct Dictionary
 
 impl Dictionary
 {
-  fn new( ) -> Self
-  {
+  fn new( ) -> Self {
     Self { map: BTreeMap::new( ) }
   }
 
-  fn from_void( ptr: *const c_void ) -> Option< &'static Self >
-  {
-    if ptr == ptr::null( ) { ( ) }
-    Some( unsafe { &*{ ptr as *const Self } } )
-  }
-
-  fn as_void( &self ) -> *const c_void
-  {
-    self as *const _ as *const c_void
-  }
-
-  fn insert( &mut self, key: &str, val: &str )
-  {
+  fn insert( &mut self, key: &str, val: &str ) {
     self.map.insert( key.to_string( ), val.to_string( ) );
   }
 
-  fn matches( &self, input: &str ) -> Vec< String >
-  {
+  fn matches( &mut self, input: &str ) -> Vec< String > {
     let mut result: Vec< String > = vec![ ];
     let range = self.map.range( input.to_string( ) .. );
-    for item in range
-    {
-      if item.0.starts_with( input )
-      {
+    for item in range {
+      if item.0.starts_with( input ) {
         result.push( item.0.to_string( ) );
       }
     }
     result
-  }
-}
-
-fn callback(input: &str, ptr: *const c_void) -> Vec<String> {
-  match Dictionary::from_void( ptr )
-  {
-    Some( dict ) => dict.matches( input ),
-    None => Vec::new( )
   }
 }
 
@@ -62,8 +38,18 @@ fn main() {
   dict.insert( "help", "This info" );
   dict.insert( "history", "Is wot happened before innit" );
 
-  let ptr = dict.as_void( );
-  linenoise::set_callback_with_arg(callback, ptr);
+  let ptr = Arc::new( Mutex::new( dict ) );
+  let weak = Arc::downgrade( &ptr );
+  linenoise::set_callback_with_fn( move | input | {
+    if let Some( dict ) = weak.upgrade( ) {
+      let mut lock = dict.lock( ).unwrap( );
+      lock.matches( input )
+    }
+    else {
+      Vec::new( )
+    }
+  } );
+
   linenoise::set_multiline(0);
 
   loop {
