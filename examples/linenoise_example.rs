@@ -77,5 +77,5 @@ fn main() {
       }
     }
   }
-  linenoise::history_free( );
+  linenoise::reset( );
 }

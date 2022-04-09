@@ -3023,6 +3023,10 @@ void linenoiseSetCompletionCallback(linenoiseCompletionCallback* fn) {
     completionCallback = fn;
 }
 
+void linenoiseResetCompletionCallback() {
+    completionCallback = nullptr;
+}
+
 void linenoiseAddCompletion(linenoiseCompletions* lc, const char* str) {
     lc->completionStrings.push_back(Utf32String(str));
 }

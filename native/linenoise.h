@@ -48,6 +48,7 @@ extern "C" {
 
   typedef void(linenoiseCompletionCallback)(const char*, linenoiseCompletions*);
   void linenoiseSetCompletionCallback(linenoiseCompletionCallback* fn);
+  void linenoiseResetCompletionCallback();
   void linenoiseAddCompletion(linenoiseCompletions* lc, const char* str);
 
   char* linenoise(const char* prompt);

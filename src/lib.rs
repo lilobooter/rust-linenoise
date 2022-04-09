@@ -45,7 +45,6 @@ extern crate libc;
 use std::ffi::CString;
 use std::ffi::CStr;
 use std::str;
-use std::ptr;
 use std::sync::Mutex;
 
 pub mod ffi;
@@ -92,6 +91,15 @@ fn internal_fn_callback(cs: *mut libc::c_char, lc:*mut Completions) {
                 add_completion(lc, x.as_ref());
             }
         }
+    }
+}
+
+pub fn reset( ) {
+    unsafe {
+        USER_COMPLETION = None;
+        USER_COMPLETION_FN = None;
+        ffi::linenoiseResetCompletionCallback();
+        ffi::linenoiseHistoryFree();
     }
 }
 

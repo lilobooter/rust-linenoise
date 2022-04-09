@@ -994,8 +994,8 @@ extern "C" {
     // pub static mut _CurrentRuneLocale: *mut _RuneLocale;
 }
 extern "C" {
-    pub fn linenoiseSetCompletionCallback(arg1:
-                                              *mut linenoiseCompletionCallback);
+    pub fn linenoiseSetCompletionCallback(arg1: *mut linenoiseCompletionCallback);
+    pub fn linenoiseResetCompletionCallback();
     pub fn linenoiseAddCompletion(arg1: *mut linenoiseCompletions,
                                   arg2: *const libc::c_char);
     pub fn linenoise(prompt: *const libc::c_char) -> *mut libc::c_char;
