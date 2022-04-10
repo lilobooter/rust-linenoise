@@ -1751,7 +1751,8 @@ static int cleanupCtrl(int c) {
 }
 
 // break characters that may precede items to be completed
-static const char breakChars[] = " =+-/\\*?\"'`&<>;|@{([])}";
+// TODO: Makes this configurable
+static const char breakChars[] = " "; // " =+-/\\*?\"'`&<>;|@{([])}";
 
 // maximum number of completions to display without asking
 static const size_t completionCountCutoff = 100;
