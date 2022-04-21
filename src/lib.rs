@@ -234,3 +234,9 @@ fn internal_callback(cs: *mut libc::c_char, lc:*mut Completions ) {
         }
     }
 }
+
+pub fn dimensions( ) -> ( i32, i32 ) {
+    unsafe {
+	    ( ffi::linenoiseGetWidth(), ffi::linenoiseGetHeight() )
+    }
+}

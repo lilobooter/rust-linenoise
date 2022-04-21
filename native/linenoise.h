@@ -64,6 +64,8 @@ extern "C" {
   void linenoisePrintKeyCodes(void);
   /* the following is extension to the original linenoise API */
   int linenoiseInstallWindowChangeHandler(void);
+  int linenoiseGetWidth(void);
+  int linenoiseGetHeight(void);
 
 #ifdef __cplusplus
 }

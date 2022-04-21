@@ -3213,3 +3213,11 @@ int linenoiseInstallWindowChangeHandler(void) {
     return 0;
 }
 
+int linenoiseGetWidth(void) {
+    return getScreenColumns();
+}
+
+int linenoiseGetHeight(void) {
+    return getScreenRows();
+}
+
