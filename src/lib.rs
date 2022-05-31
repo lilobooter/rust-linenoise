@@ -46,6 +46,7 @@ use std::ffi::CString;
 use std::ffi::CStr;
 use std::str;
 use std::sync::Mutex;
+use libc::c_char;
 
 pub mod ffi;
 
@@ -112,8 +113,8 @@ pub fn input(prompt: &str) -> Option<String> {
         let cs = cprompt.as_ptr();
         let rret = ffi::linenoise(cs);
 
-        let rval = if rret != 0 as *mut i8 {
-            let ptr = rret as *const i8;
+        let rval = if rret != 0 as *mut c_char {
+            let ptr = rret as *const c_char;
             let cast = str::from_utf8(CStr::from_ptr(ptr).to_bytes()).unwrap().to_string();
             libc::free(ptr as *mut libc::c_void);
             Some(cast)
@@ -170,8 +171,8 @@ pub fn history_load(file: &str) -> i32 {
 pub fn history_line(index: i32) -> Option<String> {
     unsafe {
         let ret = ffi::linenoiseHistoryLine(index);
-        let rval = if ret != 0 as *mut i8 {
-            let ptr = ret as *const i8;
+        let rval = if ret != 0 as *mut c_char {
+            let ptr = ret as *const c_char;
             let cast = str::from_utf8(CStr::from_ptr(ptr).to_bytes()).unwrap().to_string();
             libc::free(ptr as *mut libc::c_void);
             Some(cast)
